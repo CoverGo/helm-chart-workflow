@@ -1,0 +1,31 @@
+#@ load("workflows.lib.yml", "pull_request_defaults")
+#@ load("steps.lib.yml", "setup_gflows", "check_workflows")
+#@ load("naming.lib.yml", "job")
+#@ load("common.lib.yml", "common")
+#@ load("configuration.lib.yml", "cfg")
+#@ load("tagging.lib.yml", "tagging")
+
+
+name: helm-chart
+
+"on":
+  push:
+    branches:
+    - master
+    - main
+
+jobs:
+  release_helmchart:
+    name: release-helmchart
+    runs-on: ubuntu-latest
+    container: dtzar/helm-kubectl:3.10
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Package & Upload Helm Chart
+      run: |
+        ${{ secrets.GH_ACTIONS_SA }} | helm registry login https://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }}/web-${{ env.RBI_ENV }}-django -u _json_key --password-stdin
+        helm version
+        helm package main/charts/website
+        ls -la
+        helm push website-0.1.0.tgz oci://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }}/web-${{ env.RBI_ENV }}-django/charts

@@ -1,0 +1,51 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+#@ load("naming.lib.yml","job")
+#@ load("common.lib.yml","common")
+#@ load("tagging.lib.yml","tagging")
+#@ load("configuration.lib.yml","cfg")
+
+
+#@ def _login_docker(registry):
+name: #@ "Login to {}".format(registry.name)
+uses: docker/login-action@v2
+with:
+  registry: #@ getattr(registry,"url","ghcr.io")
+  username: #@ getattr(registry, "user", "${{ github.repository_owner }}")
+  password: #@ getattr(registry, "password","${{ secrets.GITHUB_TOKEN }}")
+#@ end
+---
+#@ def _checkout():
+name: Checkout repository
+uses: actions/checkout@v3
+#@ end 
+---
+#@ def _checkout_private_actions():
+name: Checkout GitHub Action Repos
+uses: daspn/private-actions-checkout@v2
+with:
+  actions_list: '[
+    "covergo/get-version@v1.6",
+    "covergo/get-issue-key@v1.3",
+    "covergo/docker-extract@v1.1",
+    "covergo/docker-diagnose@v1.8",
+    "covergo/set-compose-tags@v1.0.1",
+    "covergo/run-in-compose@v1"
+    ]'
+  checkout_base_path: ./.github/actions
+  app_id: ${{ secrets.PRIVATE_ACTION_APP_ID }}
+  app_private_key: ${{ secrets.PRIVATE_ACTION_APP_PRIVATE_KEY }}
+#@ end
+---
+#@ def setup_gflows():
+  uses: jbrunton/setup-gflows@v1
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+#@ end
+---
+#@ def check_workflows():
+  name: check workflows
+  env:
+    GFLOWS_CONFIG: .gflows/config.yml
+  run: gflows check
+#@ end

@@ -1,1 +1,1 @@
-# helm-chart-workflow
+# Helm-chart workflow for GitHub Actions
