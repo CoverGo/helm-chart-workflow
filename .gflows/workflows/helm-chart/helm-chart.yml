@@ -11,8 +11,12 @@ name: helm-chart
 "on":
   push:
     branches:
-    - master
-    - main
+      - master
+      - main
+    paths:
+      - 'chart/**'
+      - 'helm/**'
+      - 'base/**'
 
 jobs:
   release_helmchart:
