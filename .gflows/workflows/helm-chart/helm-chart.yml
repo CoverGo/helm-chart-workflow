@@ -1,4 +1,3 @@
-#@ load("workflows.lib.yml", "pull_request_defaults")
 #@ load("steps.lib.yml", "setup_gflows", "check_workflows")
 #@ load("naming.lib.yml", "job")
 #@ load("common.lib.yml", "common")
