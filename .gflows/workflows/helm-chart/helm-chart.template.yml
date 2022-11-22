@@ -1,23 +1,8 @@
-#@ load("workflows.lib.yml", "pull_request_defaults")
-#@ load("steps.lib.yml", "setup_gflows", "check_workflows")
-#@ load("naming.lib.yml", "job")
+#@ load("@ytt:data", "data")
 #@ load("common.lib.yml", "common")
-#@ load("configuration.lib.yml", "cfg")
-#@ load("tagging.lib.yml", "tagging")
 
-
-name: helm-chart
-
-"on":
-  push:
-    branches:
-      - master
-      - main
-    paths:
-      - 'chart/**'
-      - 'helm/**'
-      - 'base/**'
-
+name: Release Helm Chart
+"on": #@ common.workflow_triggers(getattr(getattr(data.values,"helm_chart"),"git"))
 jobs:
   release_helmchart:
     name: release-helmchart

@@ -5,8 +5,6 @@ templates:
   engine: ytt
   defaults:
     libs:
-      - workflow-configuration/build-publish
-      - libs
-      - libs/jobs
+      - workflow-configuration/helm-chart
     dependencies:
-      - https://raw.githubusercontent.com/CoverGo/ci-workflow-libraries/v2.3/.gflows
+      - https://raw.githubusercontent.com/CoverGo/ci-workflow-libraries/v2.2/.gflows

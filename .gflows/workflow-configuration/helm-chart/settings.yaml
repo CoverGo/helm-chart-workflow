@@ -1,0 +1,14 @@
+#@data/values
+#@ load("@ytt:overlay", "overlay")
+#@overlay/match by=overlay.all
+---
+#@overlay/match missing_ok=True
+helm_chart: 
+  git:
+    branches:
+      - master
+      - main
+    paths:
+      - chart/**
+      - helm/**
+      - base/**

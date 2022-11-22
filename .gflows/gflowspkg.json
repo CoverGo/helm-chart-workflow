@@ -1,10 +1,6 @@
 {
   "name": "helm-chart",
   "files": [
-    "workflows/helm-chart/helm-chart.yml",
-    "libs/configuration.lib.yml",
-    "libs/naming.lib.yml",
-    "libs/steps.lib.yml",
-    "libs/tagging.lib.yml"
+    "workflows/helm-chart/helm-chart.template.yml"
   ]
 }
