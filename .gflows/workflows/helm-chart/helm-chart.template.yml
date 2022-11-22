@@ -20,5 +20,4 @@ jobs:
         ${{ secrets.HELM_CHART_SA_KEY }} | helm registry login https://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }} -u _json_key --password-stdin
         helm version
         helm package ${{ env.CHART_PATH }}
-        PKG=$(ls *.tgz | head -n1)
-        helm push ${{ PKG }} oci://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }}/${{ env.CHART_NAME }}
+        helm push $(ls *.tgz | head -n1) oci://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }}/${{ env.CHART_NAME }}
