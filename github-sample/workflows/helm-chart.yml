@@ -6,6 +6,10 @@ name: Release Helm Chart
     branches:
     - master
     - main
+    paths:
+    - chart/**
+    - helm/**
+    - base/**
 jobs:
   release_helmchart:
     name: release-helmchart

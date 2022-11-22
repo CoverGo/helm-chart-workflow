@@ -2,7 +2,7 @@
 #@ load("common.lib.yml", "common")
 
 name: Release Helm Chart
-"on": #@ common.workflow_triggers(getattr(getattr(data.values,"helm_chart"),"git"))
+"on": #@ common.workflow_triggers_with_path(getattr(getattr(data.values,"helm_chart"),"git"))
 jobs:
   release_helmchart:
     name: release-helmchart
