@@ -9,15 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
     env:
-      GKE_ZONE: us-central1
-      GC_PROJECT_ID: k8s-saas
       CHART_PATH: base/backend/$CHART_NAME
-      CHART_NAME: covergo-achievements
+      CHART_NAME: scheduler
+      GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.HELM_CHART_SA_KEY }}
     steps:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
       run: |-
-        ${{ secrets.HELM_CHART_SA_KEY }} | helm registry login https://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }} -u _json_key --password-stdin
+        echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" | helm registry login https://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production -u _json_key --password-stdin
         helm version
         helm package ${{ env.CHART_PATH }}
-        helm push $(ls *.tgz | head -n1) oci://${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.GC_PROJECT_ID }}/${{ env.CHART_NAME }}
+        helm push $(ls *${{ env.CHART_NAME }}*.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
