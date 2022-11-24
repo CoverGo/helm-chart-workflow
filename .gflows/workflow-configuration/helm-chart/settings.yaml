@@ -12,3 +12,5 @@ helm_chart:
       - chart/**
       - helm/**
       - base/**
+  chart_name: test
+  chart_path: test/test

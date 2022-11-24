@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
     env:
-      CHART_PATH: base/backend/$CHART_NAME
-      CHART_NAME: scheduler
+      CHART_PATH: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_path"),"test")
+      CHART_NAME: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_name"),"test")
       GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.HELM_CHART_SA_KEY }}
     steps:
     - uses: actions/checkout@v2
