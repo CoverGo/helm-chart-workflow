@@ -16,14 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
     env:
-      CHART_PATH: test/test
-      CHART_NAME: test
+      CHART_NAMES: chart helm base
       GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.HELM_CHART_SA_KEY }}
     steps:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
       run: |-
-        echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" | helm registry login https://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production -u _json_key --password-stdin
-        helm version
-        helm package ${{ env.CHART_PATH }}
-        helm push $(ls *${{ env.CHART_NAME }}*.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
+        for f in $CHART_NAMES; do
+          echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" | helm registry login https://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production -u _json_key --password-stdin
+          helm version
+          helm package $f
+          helm push $(ls *$f*.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
+        done
