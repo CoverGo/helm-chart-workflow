@@ -17,7 +17,9 @@ jobs:
       run: |-
         echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" | helm registry login https://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production -u _json_key --password-stdin
         for f in $CHART_NAMES; do
-          helm dependency update $f
-          helm package $f
-          helm push $(ls *$f*.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
+          cd $f
+          helm dependency update
+          helm package .
+          helm push $(ls *.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
+          cd ..
         done
