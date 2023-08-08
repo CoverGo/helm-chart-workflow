@@ -4,12 +4,6 @@
 ---
 #@overlay/match missing_ok=True
 helm_chart: 
-  git:
-    branches:
-      - master
-      - main
-    paths:
-      - chart/**
-      - helm/**
-      - base/**
+  repository_dispatch:
+    types: [helm_release]
   chart_names: chart helm base

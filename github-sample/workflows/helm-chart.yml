@@ -2,16 +2,12 @@
 # Source: .gflows/workflows/helm-chart
 name: Release Helm Chart
 "on":
-  push:
-    branches:
-    - master
-    - main
-    paths:
-    - chart/**
-    - helm/**
-    - base/**
+  repository_dispatch:
+    types:
+    - helm_release
 jobs:
   release_helmchart:
+    if: github.ref_type == 'tag'
     name: release-helmchart
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
@@ -21,10 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
+      working-directory: ./CHART_NAMES
       run: |-
-        for f in $CHART_NAMES; do
-          echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" | helm registry login https://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production -u _json_key --password-stdin
-          helm version
-          helm package $f
-          helm push $(ls *$f*.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
-        done
+        helm lint .
+        echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
+        helm package . --version ${{ github.ref_name }} --app-version ${{ github.ref_name }}
+        helm push .*-${{ github.ref_name }}.tgz oci://ghcr.io/covergo/charts
