@@ -7,3 +7,4 @@ helm_chart:
   repository_dispatch:
     types: [helm_release]
   chart_names: chart helm base
+  image_name: covergo/covergo-release-demo

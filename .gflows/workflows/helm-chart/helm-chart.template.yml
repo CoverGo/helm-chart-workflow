@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
     env:
-      CHART_NAMES: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_names"),"test")
+      CHART_NAMES: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_names"),"test"
+      TAG: ${{ github.event.client_payload.ref_name }}
     steps:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
@@ -18,5 +19,6 @@ jobs:
         helm lint .
         echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
         helm dependency update
-        helm package . --version ${{ github.ref_name }} --app-version ${{ github.ref_name }}
+        echo $TAG
+        helm package . --version ${{ github.event.client_payload.ref_name }} --app-version ${{ github.event.client_payload.ref_name }}
         helm push .*-${{ github.ref_name }}.tgz oci://ghcr.io/covergo/charts
