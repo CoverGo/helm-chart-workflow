@@ -7,7 +7,6 @@ name: Release Helm Chart
     - helm_release
 jobs:
   release_helmchart:
-    if: github.ref_type == 'tag'
     name: release-helmchart
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
