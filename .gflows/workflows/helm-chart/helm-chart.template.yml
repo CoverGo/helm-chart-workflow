@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
     env:
-      CHART_NAMES: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_names"),"test"
+      CHART_NAMES: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_names"),"test")
       TAG: ${{ github.event.client_payload.ref_name }}
     steps:
     - uses: actions/checkout@v2
