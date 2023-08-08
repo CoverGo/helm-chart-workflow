@@ -10,11 +10,10 @@ jobs:
     container: dtzar/helm-kubectl:3.10
     env:
       CHART_NAMES: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_names"),"test")
-      GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.HELM_CHART_SA_KEY }}
     steps:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
-      working-directory: ./$CHART_NAMES
+      working-directory: ${{ env.CHART_NAMES }}
       run: |-
         helm lint .
         echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
