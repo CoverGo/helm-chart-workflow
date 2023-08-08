@@ -23,4 +23,4 @@ jobs:
         helm dependency update
         echo $TAG
         helm package . --version $TAG --app-version $TAG
-        helm push .*-$TAG.tgz oci://ghcr.io/covergo/charts
+        helm push $(ls *-$TAG.tgz | head -n1) oci://ghcr.io/covergo/charts
