@@ -5,7 +5,6 @@ name: Release Helm Chart
 "on": #@ common.workflow_triggers_dispatch(getattr(getattr(data.values,"helm_chart"),"repository_dispatch"))
 jobs:
   release_helmchart:
-    if: github.ref_type == 'tag'
     name: release-helmchart
     runs-on: ubuntu-latest
     container: dtzar/helm-kubectl:3.10
