@@ -17,5 +17,6 @@ jobs:
       run: |-
         helm lint .
         echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
+        helm dependency update
         helm package . --version ${{ github.ref_name }} --app-version ${{ github.ref_name }}
         helm push .*-${{ github.ref_name }}.tgz oci://ghcr.io/covergo/charts
