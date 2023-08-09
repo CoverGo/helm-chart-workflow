@@ -20,5 +20,11 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
         helm dependency update
         echo $TAG
+        snap install yq --channel=v3/stable
+        yq -i '.covergo-app.image.tag = "1.2.3"' values.yaml
+        git config user.name "release-bot"
+        git config user.email "release-bot@covergo.com"
+        git commit -s -m"[release-bot] Updating helm chart image version" values.yaml
+        git push
         helm package . --version $TAG --app-version $TAG
         helm push $(ls *-$TAG.tgz | head -n1) oci://ghcr.io/covergo/charts
