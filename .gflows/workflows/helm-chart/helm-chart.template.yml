@@ -21,7 +21,7 @@ jobs:
         helm dependency update
         echo $TAG
         snap install yq --channel=v3/stable
-        yq -i '.covergo-app.image.tag = "1.2.3"' values.yaml
+        yq -i '.covergo-app.image.tag = "$TAG"' values.yaml
         git config user.name "release-bot"
         git config user.email "release-bot@covergo.com"
         git commit -s -m"[release-bot] Updating helm chart image version" values.yaml
