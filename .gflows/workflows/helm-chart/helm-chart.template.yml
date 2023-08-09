@@ -20,7 +20,6 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
         helm dependency update
         echo $TAG
-        snap install yq --channel=v3/stable
         yq -i '.covergo-app.image.tag = "$TAG"' values.yaml
         git config user.name "release-bot"
         git config user.email "release-bot@covergo.com"
