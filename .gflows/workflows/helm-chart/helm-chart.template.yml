@@ -25,6 +25,8 @@ jobs:
         helm push $(ls *-$TAG.tgz | head -n1) oci://ghcr.io/covergo/charts
     - name: Push changes
       run: |
+        ls .
+        cd ..
         git config user.name "release-bot"
         git config user.email "release-bot@covergo.com"
         git commit -s -m"[release-bot] Updating helm chart image version" values.yaml
