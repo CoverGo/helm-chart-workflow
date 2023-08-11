@@ -19,7 +19,7 @@ jobs:
         helm lint .
         echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
         helm dependency update
-        echo $TAG
-        yq -i '.covergo-app.image.tag = strenv(TAG)' values.yaml
-        helm package . --version $TAG --app-version $TAG
+        export TRIMTAG=${TAG//v}
+        yq -i '.covergo-app.image.tag = strenv(TRIMTAG)' values.yaml
+        helm package . --version $TRIMTAG --app-version $TRIMTAG
         helm push $(ls *-$TAG.tgz | head -n1) oci://ghcr.io/covergo/charts
