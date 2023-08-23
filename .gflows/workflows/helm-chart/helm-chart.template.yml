@@ -15,9 +15,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
       run: |-
-        echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" | helm registry login https://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production -u _json_key --password-stdin
+        echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
         for f in $CHART_NAMES; do
+          helm lint $f
           helm dependency update $f
           helm package $f
-          helm push $(ls *$f*.tgz | head -n1) oci://us-central1-docker.pkg.dev/gcp-helm-registry/covergo-helm-production
+          helm push $(ls *$f*.tgz | head -n1) oci://ghcr.io/covergo/charts
         done
