@@ -3,6 +3,12 @@
 
 name: Release Helm Chart
 "on": #@ common.workflow_triggers_dispatch(getattr(getattr(data.values,"helm_chart"),"repository_dispatch"))
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Helm chart version'
+        required: true
+        default: 'x.x.x'
 jobs:
   release_helmchart:
     name: release-helmchart
@@ -10,7 +16,7 @@ jobs:
     container: dtzar/helm-kubectl:3.10
     env:
       CHART_NAMES: #@ common.get_value(getattr(getattr(data.values,"helm_chart"),"chart_names"),"test")
-      TAG: ${{ github.event.client_payload.ref_name }}
+      TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event.client_payload.ref_name }}
     steps:
     - uses: actions/checkout@v2
     - name: Package & Upload Helm Chart
