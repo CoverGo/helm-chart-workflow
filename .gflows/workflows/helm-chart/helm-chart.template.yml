@@ -2,7 +2,10 @@
 #@ load("common.lib.yml", "common")
 
 name: Release Helm Chart
-"on": #@ common.workflow_triggers_dispatch(getattr(getattr(data.values,"helm_chart"),"repository_dispatch"))
+"on":
+  repository_dispatch:
+    types:
+    - helm_release
   workflow_dispatch:
     inputs:
       version:
