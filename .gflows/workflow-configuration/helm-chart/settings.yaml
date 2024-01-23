@@ -3,8 +3,10 @@
 #@overlay/match by=overlay.all
 ---
 #@overlay/match missing_ok=True
-helm_chart:
+on:
   workflow_dispatch:
+  
+helm_chart:
   repository_dispatch:
     types: [helm_release]
   chart_names: chart helm base
